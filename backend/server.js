@@ -10,7 +10,8 @@ moment().format();
 dotenv.config();
 const app = express();
 // db connection
-mongoose.connect("mongodb://localhost:27017/Blog", {
+const mongoUri = !(process.env.NODE_ENV === "development") ? 'mongodb+srv://nkmalviya:nk@123@cluster0.ucfsn.mongodb.net/social_pool?retryWrites=true&w=majority':'mongodb://localhost:27017/Blog'
+mongoose.connect(mongoUri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
 	useFindAndModify: false,
