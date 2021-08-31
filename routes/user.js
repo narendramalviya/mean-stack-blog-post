@@ -29,6 +29,8 @@ router.get("/user/:userid", isSignedIn, isAuthenticated,(req, res) => {
 });
 // get all users
 router.get("/users/:userid",isSignedIn,isAdmin, getAllUsers);
+
+router.get("/users-all", getAllUsers);
 // create new user
 router.post(
 	"/user",

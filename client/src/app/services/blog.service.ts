@@ -27,12 +27,12 @@ export class BlogService {
     //       }));
     //   }));
 
-    return this.http.get<any>(`${environment.apiUrl}/api/posts/1`);
+    return this.http.get<any>(`${environment.apiUrl}/api/posts`);
 
   }
 
   getPostbyId(id: string): Observable<Post> {
-    return this.http.get<any>(`${environment.apiUrl}/api/post/${id}/1`);
+    return this.http.get<any>(`${environment.apiUrl}/api/post/${id}`);
   }
 
   updatePost(postId: string, post: Post) {

@@ -32,7 +32,14 @@ exports.signIn = (req, res) => {
 		res.cookie("token", token, { expire: new Date() + 3600000 });
 		//send response to front end
 		const { _id, firstName, lastName, email, phone,role } = user;
-		return res.json({ token, user: { _id, firstName, email,role } });
+		return res.status(200).json({ 
+			message:'signin success',
+			data:{
+				token, 
+				user: { _id, firstName, email,role }
+			},
+			error:""
+		});
 	});
 };
 // middleware extract token from auth header if not available throws error also for invalid
@@ -47,16 +54,17 @@ exports.isAuthenticated = (req, res, next) => {
 	let checker = req.user && req.auth && req.user._id == req.auth._id;
 	if (!checker) {
 		return res.status(403).json({
-			error: "ACCESS DENIED",
+			 message:"ACCESS DENIED",
+			 error: "ACCESS DENIED",
 		});
 	}
 	next();
 };
 exports.isAdmin = (req, res, next) => {
-    console.log('isaAdmin req.user ',req.user)
-    if (!(req.user.role === 1 && req.auth._id == req.user.id)) {
+    if (!(req.user.role === 1 && req.auth._id == req.user._id)) {
       return res.status(403).json({
-        error: "You are not ADMIN, Access denied"
+		message:"You are not ADMIN, Access denied",
+        error: "ACCESS DENIED"
       });
     }
     next();

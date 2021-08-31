@@ -19,7 +19,7 @@ export class BlogCardComponent implements OnInit, OnDestroy {
   config: any;
   pageSizeOptions = [];
 
-  blogPost: Post[] = [];
+  blogPost: any = [];
   appUser: AppUser;
   private unsubscribe$ = new Subject<void>();
 
@@ -51,8 +51,8 @@ export class BlogCardComponent implements OnInit, OnDestroy {
     this.blogService.getAllPosts()
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(result => {
-        //  console.log(' result -- ',result.posts)
-        this.blogPost = result.posts;
+        //  console.log(' result -- ',result.data)
+        this.blogPost = result.data;
       });
   }
 

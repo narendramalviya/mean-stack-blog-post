@@ -21,7 +21,7 @@
           <button mat-raised-button color="warn" (click)="delete(post.postId)">Delete</button>
         </ng-container>
         <span class="spacer"></span>
-        <button mat-raised-button color="primary" [routerLink]="['/blog/', post._id, '2343435345' | slug]">Read
+        <button mat-raised-button color="primary" [routerLink]="['/blog/', post._id | slug]">Read
           More</button>
       </mat-card-actions>
     </mat-card>

@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { BlogService } from 'src/app/services/blog.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-blog',
@@ -12,8 +13,9 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class BlogComponent implements OnInit, OnDestroy {
 
-  postData: Post = new Post();
+  postData;
   postId;
+  imageUrl:String;
   private unsubscribe$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute,
@@ -30,6 +32,7 @@ export class BlogComponent implements OnInit, OnDestroy {
         (result:any) => {
           console.log('post data',result);
           this.postData = result.data;
+          this.imageUrl = `${environment.apiUrl}/api/file/${this.postData.fileId}`
         }
       );
   }

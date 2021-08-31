@@ -34,13 +34,30 @@ export class AuthService {
     );
   }
 
+  // google auth
+  // async login() {
+  //   // Store the return URL in localstorage, to be used once the user logs in successfully
+  //   const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || this.router.url;
+  //   localStorage.setItem('returnUrl', returnUrl);
+
+  //   const credential = await this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+  //   return this.updateUserData(credential.user);
+  // }
+
+  // async logout() {
+  //   this.afAuth.signOut().then(() => {
+  //     this.router.navigate(['/']);
+  //   });
+  // }
+
   async login() {
     // Store the return URL in localstorage, to be used once the user logs in successfully
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || this.router.url;
-    localStorage.setItem('returnUrl', returnUrl);
+    // const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || this.router.url;
+    // localStorage.setItem('returnUrl', returnUrl);
 
-    const credential = await this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-    return this.updateUserData(credential.user);
+    // const credential = await this.afAuth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    // return this.updateUserData(credential.user);
+    
   }
 
   async logout() {

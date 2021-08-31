@@ -18,7 +18,10 @@ var postSchema = new mongoose.Schema(
 			minLength: 5,
 			maxLength: 10000,
 		},
-		author: { type: Schema.Types.ObjectId, ref: 'users' }
+		fileId:{
+			type: String
+		},
+		author: { type: Schema.Types.ObjectId, ref: 'Users' }
 	},
 	{ timestamps: true }
 );

@@ -10,7 +10,7 @@ moment().format();
 dotenv.config();
 const app = express();
 // db connection
-const mongoUri = !(process.env.NODE_ENV === "development") ? 'mongodb+srv://nkmalviya:nk@123@cluster0.ucfsn.mongodb.net/social_pool?retryWrites=true&w=majority':'mongodb://localhost:27017/Blog'
+const mongoUri = process.env.NODE_ENV === "development" ? 'mongodb://localhost:27017/Blog':'mongodb+srv://nkmalviya:nk@123@cluster0.ucfsn.mongodb.net/social_pool?retryWrites=true&w=majority'
 mongoose.connect(mongoUri, {
 	useNewUrlParser: true,
 	useUnifiedTopology: true,
@@ -36,6 +36,7 @@ app.use(cors());
 const userRoutes = require("./routes/user");
 const authRoutes = require("./routes/auth");
 const postRoutes = require("./routes/post");
+const fileRoutes = require("./routes/file");
 app.get("/home", (req, res) => {
 	res.send("home");
 });
@@ -44,6 +45,7 @@ app.get("/home", (req, res) => {
 app.use("/api", userRoutes);
 app.use("/api", authRoutes);
 app.use("/api", postRoutes);
+app.use("/api", fileRoutes);
 
 const port = 7000;
 app.listen(port, () => {

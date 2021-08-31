@@ -28,6 +28,8 @@ import { PaginatorComponent } from "./components/paginator/paginator.component";
 import { AuthorProfileComponent } from "./components/author-profile/author-profile.component";
 import { AuthGuard } from "./guards/auth.guard";
 import { AdminAuthGuard } from "./guards/admin-auth.guard";
+import { AuthComponent } from './auth/auth.component';
+import { AdminComponent } from './admin/admin.component';
 const customConfig: ShareButtonsConfig = {
   twitterAccount: "ankitsharma_007",
 };
@@ -47,6 +49,8 @@ const customConfig: ShareButtonsConfig = {
     SocialShareComponent,
     PaginatorComponent,
     AuthorProfileComponent,
+    AuthComponent,
+    AdminComponent,
   ],
   imports: [
     NgxPaginationModule,
@@ -75,7 +79,9 @@ const customConfig: ShareButtonsConfig = {
           component: BlogEditorComponent,
           canActivate: [AdminAuthGuard],
         },
-        { path: "blog/:id/:slug", component: BlogComponent },
+        { path: "blog/:id", component: BlogComponent },
+        { path: 'auth', component: AuthComponent },
+        { path: 'admin', component: AdminComponent },
         { path: "**", component: HomeComponent },
       ],
       { relativeLinkResolution: "legacy" }

@@ -1,50 +1,80 @@
 const Post = require("../models/post");
+const File = require("../models/file");
 const { check, validationResult } = require("express-validator");
+const multer = require("multer");
 // create post
 // update post
 // delete post
 // getAll post
 // getUser By id
+exports.upload = multer({ dest: "uploads/post/" });
 
 //middleware get post by document id
-exports.getPostById = (req, res, next, id) => {
-	Post.findById(id).exec((err, post) => {
-		if (err || !post) {
-			return res.status(209).json({
-				status:209,
-				data:[],
-				error: "No post was found in DB ",
-			});
-		}
-		// console.log("user by id", user);
-		// make undefined varibales that no needed
-		req.post = post
-		next();
-	});
+exports.getById = (req, res, next, id) => {
+  Post.findById(id)
+    .populate("author")
+    .exec((err, post) => {
+      if (err || !post) {
+        console.log(err);
+        return res.status(209).json({
+          message: "No post was found in DB ",
+          data: [],
+          error: err,
+        });
+      }
+      // console.log("user by id", user);
+      // make undefined varibales that no needed
+      post.author.role = undefined;
+      post.author.salt = undefined;
+      post.author.passwordHash = undefined;
+      post.author.__v = undefined;
+	  post.__v = undefined;
+      req.post = post;
+      next();
+    });
 };
-// exports.createUser = (req, res) => {
-// 	console.log("req body", req.body);
-// 	const errors = validationResult(req);
-// 	// check errors
-// 	if (!errors.isEmpty()) {
-// 		return res.status(400).json({ error: errors.array() });
-// 	}
-// 	// create new user
-// 	User.create(req.body, (err, data) => {
-// 		if (err) {
-// 			return res.json({
-// 				msg: "getting error",
-// 				error: err,
-// 			});
-// 		}
-// 		console.log("user created ", data);
-// 		// return response
-// 		return res.json({
-// 			msg: "User created!!",
-// 			User: data,
-// 		});
-// 	});
-// };
+exports.create = async (req, res) => {
+  console.log("req body", req.body);
+  console.log("req files", req.file);
+  const errors = validationResult(req);
+  // check errors
+  if (!errors.isEmpty()) {
+    return res.status(400).json({
+      message: "validation error",
+      error: errors.array(),
+    });
+  }
+  let fileObj = null;
+  // create new user
+  if (req.file && req.file.path) {
+    const { path, filename, mimetype } = req.file;
+    // save file details to DB;
+    fileObj = await File.create({
+      name: filename,
+      filePath: path,
+      type: mimetype,
+    });
+    console.log("file saved ", fileObj);
+  }
+  if (req.file && fileObj._id) {
+    req.body.fileId = fileObj._id;
+  }
+  req.body.author = req.user._id;
+  Post.create(req.body, (err, data) => {
+    if (err) {
+      return res.status(400).json({
+        message: "getting error",
+        error: err,
+      });
+    }
+    console.log("post created ", data);
+    // return response
+    return res.status(200).json({
+      message: "post created!!",
+      User: data,
+    });
+  });
+};
 // // update user by id
 // exports.updateUser = (req, res) => {
 // 	// console.log("req user", req.user);
@@ -97,14 +127,29 @@ exports.getPostById = (req, res, next, id) => {
 // 	});
 // };
 // get all users
-exports.getAllPostByUser = (req, res) => {
-	Post.find({}, (err, posts) => {
-		if (err) {
-			return res.json({
-				msg: "error in get all posts",
-				error: err,
-			});
-		}
-		return res.json({ msg: "All posts", posts });
-	});
+exports.getAllByUser = (req, res) => {
+  Post.find({}, (err, posts) => {
+    if (err) {
+      return res.json({
+        msg: "error in get all posts",
+        error: err,
+      });
+    }
+    return res.json({ msg: "All posts", posts });
+  });
 };
+// get all posts
+exports.getAll = (req, res) => {
+	Post.find({}, (err, posts) => {
+	  if (err) {
+		return res.json({
+		  message: "error to get all posts",
+		  error: err,
+		});
+	  }
+	  return res.json({ 
+		  	message: "All posts",
+			data: posts
+		 });
+	});
+  };
